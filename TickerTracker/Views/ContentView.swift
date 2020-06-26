@@ -8,19 +8,41 @@
 
 import SwiftUI
 
-struct userInfo {
+class userInfo: NSObject, NSCoding {
     var name: String
     var bottom: Double
     var top: Double
+    
+    init(name: String, bottom: Double, top: Double) {
+        self.name = name
+        self.bottom = bottom
+        self.top = top
+    }
+    
+    required convenience init(coder aDecoder: NSCoder) {
+        let name = aDecoder.decodeObject(forKey: "name") as! String
+        let bottom = aDecoder.decodeDouble(forKey: "bottom")
+        let top = aDecoder.decodeDouble(forKey: "top")
+        self.init(name: name, bottom: bottom, top: top)
+    }
+
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(name, forKey: "name")
+        aCoder.encode(bottom, forKey: "bottom")
+        aCoder.encode(top, forKey: "top")
+    }
 }
 
 struct ContentView: View {
-    
     @ObservedObject var networkManager = NetworkManager()
-    @State var watchedStocks: [userInfo] = [userInfo(name: "SRNE", bottom: 6.00, top: 7.00), userInfo(name: "AAPL", bottom: 365, top: 367)]
+    @State var watchedStocks: [userInfo] = []
+    
+    var userDefaults = UserDefaults.standard
+    let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
+//        [userInfo(name: "SRNE", bottom: 6.00, top: 7.00), userInfo(name: "AAPL", bottom: 365, top: 367)]
     let timer = Timer.publish(every: 10, on: .current, in: .common).autoconnect()
     
-//    Stock(name: "UONE",color: Color.red),Stock(name: "SRNE",color: Color.green),Stock(name: "JPM",color: Color.red),Stock(name: "GRPN",color: Color.red),Stock(name: "PLAY",color: Color.red),Stock(name: "PLUG",color: Color.green),Stock(name: "AAPL",color: Color.red),Stock(name: "F",color: Color.red),Stock(name: "LIVX",color: Color.red),Stock(name: "CYRX",color: Color.red)
+    
     
     var body: some View {
         VStack {
@@ -65,6 +87,13 @@ struct ContentView: View {
                 .navigationBarTitle("Tracked Stocks News:")
             }
             .onAppear{
+                if self.launchedBefore  {
+                    let decoded = self.userDefaults.data(forKey: "watchedStocks")
+                    self.watchedStocks = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [userInfo]
+                } else {
+                    print("First launch, setting UserDefault.")
+                    self.watchedStocks = []
+                }
                 self.networkManager.fetchData()
                 self.networkManager.fetchStocksData(self.watchedStocks)
                 self.update()
@@ -93,6 +122,12 @@ struct ContentView: View {
             if let newStock = alert.textFields![0].text?.uppercased(), let bottom = alert.textFields?[1].text!, let top = alert.textFields?[2].text! {
                 let newFollowed = userInfo(name: newStock, bottom: Double((bottom as NSString).doubleValue), top: Double((top as NSString).doubleValue))
                 self.watchedStocks.append(newFollowed)
+                let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.watchedStocks)
+                self.userDefaults.set(encodedData, forKey: "watchedStocks")
+                if !self.launchedBefore {
+                    UserDefaults.standard.set(true, forKey: "launchedBefore")
+                }
+                self.userDefaults.synchronize()
                 self.networkManager.fetchStocksData([newFollowed])
             }
         }))
@@ -219,3 +254,6 @@ extension Color {
         }
     }
 }
+
+
+//e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWithIdentifier:@"com.viachaslaupashaliuk.apprefresh"]

@@ -12,11 +12,11 @@ class NetworkManager: ObservableObject {
     
     @Published var posts = [Post]()
     @Published var stonks = [Stock]()
+    static let session = URLSession(configuration: .default)
     
     func fetchData() {
         if let url = URL(string: "https://gnews.io/api/v3/search?q=sorrento%20therapeutics&token=15eb0bf587f3dc7e82d1a57dd853ed89") {
-            let session = URLSession(configuration: .default)
-            let task = session.dataTask(with: url) { (data, response, error) in
+            let task = NetworkManager.session.dataTask(with: url) { (data, response, error) in
                 if error == nil {
                     let decoder = JSONDecoder()
                     if let safeData = data {
@@ -38,8 +38,7 @@ class NetworkManager: ObservableObject {
     func fetchStocksData(_ tickers: [userInfo]) {
         for ticker in tickers {
             if let url = URL(string: "https://api.polygon.io/v1/last_quote/stocks/\(ticker.name)?apiKey=B5_f8CsVoyXFLajXMC1t1avFaSB9oEe3fiPTF9") {
-                let session = URLSession(configuration: .default)
-                let task = session.dataTask(with: url) { (data, response, error) in
+                let task = NetworkManager.session.dataTask(with: url) { (data, response, error) in
                     if error == nil {
                         let decoder = JSONDecoder()
                         if let safeData = data {

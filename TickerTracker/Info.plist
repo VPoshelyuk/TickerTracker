@@ -4,7 +4,8 @@
 <dict>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
-		<string>com.SO.apprefresh</string>
+		<string>com.viachaslaupashaliuk.apprefresh</string>
+		<string>com.viachaslaupashaliuk.stocksupdate</string>
 	</array>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
