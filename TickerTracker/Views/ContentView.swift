@@ -8,30 +8,31 @@
 
 import SwiftUI
 
-struct Stock: Identifiable {
-    var id = UUID()
+struct userInfo {
     var name: String
-    var color: Color
+    var bottom: Double
+    var top: Double
 }
 
 struct ContentView: View {
     
     @ObservedObject var networkManager = NetworkManager()
-    @State private var alertInput = ""
-    @State var trackedStocks = [Stock(name: "UONE",color: Color.red),Stock(name: "SRNE",color: Color.green),Stock(name: "JPM",color: Color.red),Stock(name: "GRPN",color: Color.red),Stock(name: "PLAY",color: Color.red),Stock(name: "PLUG",color: Color.green),Stock(name: "AAPL",color: Color.red),Stock(name: "F",color: Color.red),Stock(name: "LIVX",color: Color.red),Stock(name: "CYRX",color: Color.red)]
+    @State var watchedStocks: [userInfo] = [userInfo(name: "SRNE", bottom: 6.00, top: 7.00), userInfo(name: "AAPL", bottom: 365, top: 367)]
+    let timer = Timer.publish(every: 10, on: .current, in: .common).autoconnect()
     
+//    Stock(name: "UONE",color: Color.red),Stock(name: "SRNE",color: Color.green),Stock(name: "JPM",color: Color.red),Stock(name: "GRPN",color: Color.red),Stock(name: "PLAY",color: Color.red),Stock(name: "PLUG",color: Color.green),Stock(name: "AAPL",color: Color.red),Stock(name: "F",color: Color.red),Stock(name: "LIVX",color: Color.red),Stock(name: "CYRX",color: Color.red)
     
     var body: some View {
         VStack {
             Spacer()
             ScrollView(.horizontal) {
                 HStack(spacing: 10) {
-                    ForEach(trackedStocks) { stock in
-                        Text(stock.name)
+                    ForEach(networkManager.stonks){ stock in
+                        Text(stock.symbol)
                             .frame(width: 75)
                             .background(
                                 Circle()
-                                    .foregroundColor(stock.color)
+                                    .foregroundColor(Color(hex: stock.HEXColor))
                                     .frame(width: 75, height: 75)
                             )
                     }
@@ -51,7 +52,7 @@ struct ContentView: View {
                         .background(Color.orange)
                         .cornerRadius(10)
                 }
-                .frame(width: CGFloat((self.trackedStocks.count + 1) * 85), height: 75)
+                .frame(width: CGFloat((networkManager.stonks.count + 1) * 85), height: 75)
             }
             NavigationView {
                 List(networkManager.posts){post in
@@ -65,16 +66,36 @@ struct ContentView: View {
             }
             .onAppear{
                 self.networkManager.fetchData()
+                self.networkManager.fetchStocksData(self.watchedStocks)
+                self.update()
             }
         }
     }
     
+    private func update() {
+        Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { timer in
+            self.networkManager.fetchStocksData(self.watchedStocks)
+        }
+    }
     
     private func alert() {
         let alert = UIAlertController(title: "title", message: "message", preferredStyle: .alert)
         alert.addTextField() { textField in
-            textField.placeholder = "Enter some text"
+            textField.placeholder = "Enter Ticker"
         }
+        alert.addTextField() { textField in
+            textField.placeholder = "Limit Order"
+        }
+        alert.addTextField() { textField in
+            textField.placeholder = "Stop Order"
+        }
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [alert] (_) in
+            if let newStock = alert.textFields![0].text?.uppercased(), let bottom = alert.textFields?[1].text!, let top = alert.textFields?[2].text! {
+                let newFollowed = userInfo(name: newStock, bottom: Double((bottom as NSString).doubleValue), top: Double((top as NSString).doubleValue))
+                self.watchedStocks.append(newFollowed)
+                self.networkManager.fetchStocksData([newFollowed])
+            }
+        }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in })
         showAlert(alert: alert)
     }
@@ -120,5 +141,81 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+
+extension Color {
+    init(hex: String) {
+        var string: String = hex.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        if string.hasPrefix("#") {
+            _ = string.removeFirst()
+        }
+
+        // Double the last value if incomplete hex
+        if !string.count.isMultiple(of: 2), let last = string.last {
+            string.append(last)
+        }
+
+        // Fix invalid values
+        if string.count > 8 {
+            string = String(string.prefix(8))
+        }
+
+        // Scanner creation
+        let scanner = Scanner(string: string)
+
+        var color: UInt64 = 0
+        scanner.scanHexInt64(&color)
+
+        if string.count == 2 {
+            let mask = 0xFF
+
+            let g = Int(color) & mask
+
+            let gray = Double(g) / 255.0
+
+            self.init(.sRGB, red: gray, green: gray, blue: gray, opacity: 1)
+
+        } else if string.count == 4 {
+            let mask = 0x00FF
+
+            let g = Int(color >> 8) & mask
+            let a = Int(color) & mask
+
+            let gray = Double(g) / 255.0
+            let alpha = Double(a) / 255.0
+
+            self.init(.sRGB, red: gray, green: gray, blue: gray, opacity: alpha)
+
+        } else if string.count == 6 {
+            let mask = 0x0000FF
+            let r = Int(color >> 16) & mask
+            let g = Int(color >> 8) & mask
+            let b = Int(color) & mask
+
+            let red = Double(r) / 255.0
+            let green = Double(g) / 255.0
+            let blue = Double(b) / 255.0
+
+            self.init(.sRGB, red: red, green: green, blue: blue, opacity: 1)
+
+        } else if string.count == 8 {
+            let mask = 0x000000FF
+            let r = Int(color >> 24) & mask
+            let g = Int(color >> 16) & mask
+            let b = Int(color >> 8) & mask
+            let a = Int(color) & mask
+
+            let red = Double(r) / 255.0
+            let green = Double(g) / 255.0
+            let blue = Double(b) / 255.0
+            let alpha = Double(a) / 255.0
+
+            self.init(.sRGB, red: red, green: green, blue: blue, opacity: alpha)
+
+        } else {
+            self.init(.sRGB, red: 1, green: 1, blue: 1, opacity: 1)
+        }
     }
 }
