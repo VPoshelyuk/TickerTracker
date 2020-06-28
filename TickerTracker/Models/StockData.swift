@@ -14,9 +14,9 @@ struct Stock: Decodable, Identifiable {
     let symbol: String
     var last: Last
     var HEXColor: String{
-        if last.askprice > top! {
+        if last.askprice >= top! {
             return "#00FF00"
-        } else if last.askprice < bottom! {
+        } else if last.askprice <= bottom! {
             return "#FF0000"
         }else {
             return "#A1CAF1"
@@ -29,4 +29,10 @@ struct Stock: Decodable, Identifiable {
 
 struct Last: Decodable {
     var askprice: Double
+}
+
+extension Stock: Equatable {
+    static func ==(lhs: Stock, rhs: Stock) -> Bool {
+        return lhs.id == rhs.id && lhs.HEXColor == rhs.HEXColor
+    }
 }

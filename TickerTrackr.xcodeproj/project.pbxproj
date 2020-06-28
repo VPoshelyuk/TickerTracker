@@ -21,7 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		E7F7C6A924A465CB00DABFEC /* TickerTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TickerTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E7F7C6A924A465CB00DABFEC /* TickerTrackr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TickerTrackr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7F7C6AC24A465CB00DABFEC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E7F7C6AE24A465CB00DABFEC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		E7F7C6B024A465CB00DABFEC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -59,7 +59,7 @@
 		E7F7C6AA24A465CB00DABFEC /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E7F7C6A924A465CB00DABFEC /* TickerTracker.app */,
+				E7F7C6A924A465CB00DABFEC /* TickerTrackr.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -111,9 +111,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E7F7C6A824A465CA00DABFEC /* TickerTracker */ = {
+		E7F7C6A824A465CA00DABFEC /* TickerTrackr */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E7F7C6BD24A465CF00DABFEC /* Build configuration list for PBXNativeTarget "TickerTracker" */;
+			buildConfigurationList = E7F7C6BD24A465CF00DABFEC /* Build configuration list for PBXNativeTarget "TickerTrackr" */;
 			buildPhases = (
 				E7F7C6A524A465CA00DABFEC /* Sources */,
 				E7F7C6A624A465CA00DABFEC /* Frameworks */,
@@ -123,9 +123,9 @@
 			);
 			dependencies = (
 			);
-			name = TickerTracker;
+			name = TickerTrackr;
 			productName = TickerTracker;
-			productReference = E7F7C6A924A465CB00DABFEC /* TickerTracker.app */;
+			productReference = E7F7C6A924A465CB00DABFEC /* TickerTrackr.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -143,7 +143,7 @@
 					};
 				};
 			};
-			buildConfigurationList = E7F7C6A424A465CA00DABFEC /* Build configuration list for PBXProject "TickerTracker" */;
+			buildConfigurationList = E7F7C6A424A465CA00DABFEC /* Build configuration list for PBXProject "TickerTrackr" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -156,7 +156,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E7F7C6A824A465CA00DABFEC /* TickerTracker */,
+				E7F7C6A824A465CA00DABFEC /* TickerTrackr */,
 			);
 		};
 /* End PBXProject section */
@@ -323,6 +323,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = TickerTracker/TickerTracker.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"TickerTracker/Preview Content\"";
 				DEVELOPMENT_TEAM = PNRKF3G2Z5;
@@ -332,8 +333,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.viachaslaupashaliuk.TickerTracker;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.viachaslaupashaliuk.TickerTrackr;
+				PRODUCT_NAME = TickerTrackr;
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -345,6 +346,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = TickerTracker/TickerTracker.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"TickerTracker/Preview Content\"";
 				DEVELOPMENT_TEAM = PNRKF3G2Z5;
@@ -354,8 +356,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.viachaslaupashaliuk.TickerTracker;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.viachaslaupashaliuk.TickerTrackr;
+				PRODUCT_NAME = TickerTrackr;
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -365,7 +367,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E7F7C6A424A465CA00DABFEC /* Build configuration list for PBXProject "TickerTracker" */ = {
+		E7F7C6A424A465CA00DABFEC /* Build configuration list for PBXProject "TickerTrackr" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E7F7C6BB24A465CF00DABFEC /* Debug */,
@@ -374,7 +376,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E7F7C6BD24A465CF00DABFEC /* Build configuration list for PBXNativeTarget "TickerTracker" */ = {
+		E7F7C6BD24A465CF00DABFEC /* Build configuration list for PBXNativeTarget "TickerTrackr" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E7F7C6BE24A465CF00DABFEC /* Debug */,

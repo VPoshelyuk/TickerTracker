@@ -13,6 +13,13 @@ import BackgroundTasks
 class AppDelegate: UIResponder, UIApplicationDelegate {
         
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+            if granted {
+                print("Permission granted")
+            } else if let error = error {
+                print(error.localizedDescription)
+            }
+        }
         registerBackgroundTaks()
         return true
     }
@@ -21,42 +28,54 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func registerBackgroundTaks() {
         BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.viachaslaupashaliuk.apprefresh", using: nil) { task in
             //This task is cast with processing request (BGProcessingTask)
-//            self.scheduleLocalNotification()
             self.handleAppRefreshTask(task: task as! BGAppRefreshTask)
         }
     }
     
     func handleAppRefreshTask(task: BGAppRefreshTask) {
-        task.expirationHandler = {
-          NetworkManager.session.invalidateAndCancel()
-        }
+        scheduleBackgroundUpdate()
+        let content = UNMutableNotificationContent()
+        content.title = "Check your stonks"
+        content.body = "One of them fell below the set limit!"
+        content.sound = UNNotificationSound.default
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.1, repeats: false)
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request)
         let userDefaults = UserDefaults.standard
         let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
+        let currentStonks = NetworkManager.globalStonks.sorted(by: { $0.id < $1.id })
         if launchedBefore {
             let userStonks = NSKeyedUnarchiver.unarchiveObject(with: userDefaults.data(forKey: "watchedStocks")!) as! [userInfo]
-            NetworkManager().fetchStocksData(userStonks)
-//            NotificationCenter.default.post(name: .appRefreshed,
-//            object: self,
-//            userInfo: ["stonk": "stonk"])
+            NetworkManager.globalStocksFetch(userStonks)
+            let newStonks = NetworkManager.globalStonks.sorted(by: { $0.id < $1.id })
+            if(currentStonks == newStonks){
+                print("Nothing has changed")
+            }else {
+                print("There are few updates")
+            }
+        }
+        task.expirationHandler = {
+            task.setTaskCompleted(success: false)
+            print("hfdjskl")
+            NetworkManager.session.invalidateAndCancel()
         }
         task.setTaskCompleted(success: true)
-        scheduleBackgroundUpdate()
     }
     
     func scheduleBackgroundUpdate() {
         let appRefresh = BGAppRefreshTaskRequest(identifier: "com.viachaslaupashaliuk.apprefresh")
-        appRefresh.earliestBeginDate = Date(timeIntervalSinceNow: 10)
+        appRefresh.earliestBeginDate = Date(timeIntervalSinceNow: 1)
         do {
-          try BGTaskScheduler.shared.submit(appRefresh)
+            try BGTaskScheduler.shared.submit(appRefresh)
         } catch {
           print("Unable to submit task: \(error.localizedDescription)")
         }
     }
 }
 
-extension Notification.Name {
-  static let appRefreshed = Notification.Name("com.andyibanez.apprefresh")
-}
+//extension Notification.Name {
+//  static let appRefreshed = Notification.Name("com.viachaslaupashaliuk.apprefresh")
+//}
 //
 ////MARK:- BGTask Helper
 //extension AppDelegate {

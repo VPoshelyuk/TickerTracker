@@ -33,13 +33,20 @@ class userInfo: NSObject, NSCoding {
     }
 }
 
+//func registerForNotifications() {
+//  NotificationCenter.default.addObserver(
+//    forName: .appRefreshed,
+//    object: nil,
+//    queue: nil) { (notification) in
+//      print("notification received")
+//  }
+//}
+
 struct ContentView: View {
     @ObservedObject var networkManager = NetworkManager()
     @State var watchedStocks: [userInfo] = []
-    
     var userDefaults = UserDefaults.standard
     let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
-//        [userInfo(name: "SRNE", bottom: 6.00, top: 7.00), userInfo(name: "AAPL", bottom: 365, top: 367)]
     let timer = Timer.publish(every: 10, on: .current, in: .common).autoconnect()
     
     
@@ -108,7 +115,7 @@ struct ContentView: View {
     }
     
     private func alert() {
-        let alert = UIAlertController(title: "title", message: "message", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Sup", message: "Yo", preferredStyle: .alert)
         alert.addTextField() { textField in
             textField.placeholder = "Enter Ticker"
         }
