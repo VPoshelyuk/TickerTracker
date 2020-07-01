@@ -34,7 +34,7 @@ struct Quote: Decodable {
     var latestPrice: Double
 }
 
-struct NewsPiece: Decodable, Identifiable{
+struct NewsPiece: Decodable, Identifiable, Equatable{
     let datetime: Int
     let headline: String
     let url: String

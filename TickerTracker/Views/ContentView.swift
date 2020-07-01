@@ -47,9 +47,6 @@ struct ContentView: View {
     @State var watchedStocks: [userInfo] = []
     var userDefaults = UserDefaults.standard
     let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
-    let timer = Timer.publish(every: 10, on: .current, in: .common).autoconnect()
-    
-    
     
     var body: some View {
         VStack {

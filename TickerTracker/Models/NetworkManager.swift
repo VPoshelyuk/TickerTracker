@@ -45,7 +45,18 @@ class NetworkManager: ObservableObject {
                             do {
                                 var result = try decoder.decode(Stock.self, from: safeData)
                                 DispatchQueue.main.async {
-                                    self.posts.append(contentsOf: result.news)
+                                    if(!self.posts.containsAll(array: result.news)){
+                                        self.posts.append(contentsOf: result.news)
+                                    }else{
+                                        for i in 0 ..< result.news.count {
+                                            if !self.posts.contains(where: { $0.id == result.id}) {
+                                                self.posts.append(result.news[i])
+                                            }
+                                        }
+                                    }
+                                    self.posts.sort { (lhs:NewsPiece, rhs:NewsPiece) in
+                                        return lhs.datetime > rhs.datetime
+                                    }
                                     if self.stonks.contains(where: { $0.id == result.id}) {
                                         for index in 0 ..< self.stonks.count {
                                             if self.stonks[index].id == result.id {
@@ -71,6 +82,7 @@ class NetworkManager: ObservableObject {
             }
         }
     }
+
     
 //    func fetchStocksData(_ tickers: [userInfo]) {
 //        for ticker in tickers {
@@ -129,5 +141,15 @@ class NetworkManager: ObservableObject {
                 task.resume()
             }
         }
+    }
+}
+
+
+extension Array where Element: Equatable {
+    func containsAll(array: [Element]) -> Bool {
+        for item in array {
+            if !self.contains(item) { return false }
+        }
+        return true
     }
 }
