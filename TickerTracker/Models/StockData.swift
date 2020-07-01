@@ -8,27 +8,40 @@
 
 import Foundation
 
+//iexcloud.com
 struct Stock: Decodable, Identifiable {
-    var bottom: Double?
+    var quote: Quote
+    let news: [NewsPiece]
     var top: Double?
-    let symbol: String
-    var last: Last
+    var bottom: Double?
     var HEXColor: String{
-        if last.askprice >= top! {
+        if quote.latestPrice >= top! {
             return "#00FF00"
-        } else if last.askprice <= bottom! {
+        } else if quote.latestPrice <= bottom! {
             return "#FF0000"
         }else {
             return "#A1CAF1"
         }
     }
     var id: String{
-        return symbol
+        return quote.symbol
     }
 }
 
-struct Last: Decodable {
-    var askprice: Double
+struct Quote: Decodable {
+    let symbol: String
+    let companyName: String
+    var latestPrice: Double
+}
+
+struct NewsPiece: Decodable, Identifiable{
+    let datetime: Int
+    let headline: String
+    let url: String
+    let image: String
+    var id: String{
+        return url
+    }
 }
 
 extension Stock: Equatable {
@@ -36,3 +49,33 @@ extension Stock: Equatable {
         return lhs.id == rhs.id && lhs.HEXColor == rhs.HEXColor
     }
 }
+
+//polygon.io
+//struct Stock: Decodable, Identifiable {
+//    var bottom: Double?
+//    var top: Double?
+//    let symbol: String
+//    var last: Last
+//    var HEXColor: String{
+//        if last.askprice >= top! {
+//            return "#00FF00"
+//        } else if last.askprice <= bottom! {
+//            return "#FF0000"
+//        }else {
+//            return "#A1CAF1"
+//        }
+//    }
+//    var id: String{
+//        return symbol
+//    }
+//}
+//
+//struct Last: Decodable {
+//    var askprice: Double
+//}
+//
+//extension Stock: Equatable {
+//    static func ==(lhs: Stock, rhs: Stock) -> Bool {
+//        return lhs.id == rhs.id && lhs.HEXColor == rhs.HEXColor
+//    }
+//}

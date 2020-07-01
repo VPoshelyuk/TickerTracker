@@ -57,7 +57,7 @@ struct ContentView: View {
             ScrollView(.horizontal) {
                 HStack(spacing: 10) {
                     ForEach(networkManager.stonks){ stock in
-                        Text(stock.symbol)
+                        Text(stock.quote.symbol)
                             .frame(width: 75)
                             .background(
                                 Circle()
@@ -87,7 +87,7 @@ struct ContentView: View {
                 List(networkManager.posts){post in
                     NavigationLink(destination: DetailView(url: post.url)){
                         HStack {
-                            Text(post.title)
+                            Text(post.headline)
                         }
                     }
                 }
@@ -101,16 +101,15 @@ struct ContentView: View {
                     print("First launch, setting UserDefault.")
                     self.watchedStocks = []
                 }
-                self.networkManager.fetchData()
-                self.networkManager.fetchStocksData(self.watchedStocks)
+                self.networkManager.fetchNewsAndValues(self.watchedStocks)
                 self.update()
             }
         }
     }
     
     private func update() {
-        Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { timer in
-            self.networkManager.fetchStocksData(self.watchedStocks)
+        Timer.scheduledTimer(withTimeInterval: 60 * 60, repeats: true) { timer in //3600 for testing purposes
+            self.networkManager.fetchNewsAndValues(self.watchedStocks)
         }
     }
     
@@ -135,7 +134,7 @@ struct ContentView: View {
                     UserDefaults.standard.set(true, forKey: "launchedBefore")
                 }
                 self.userDefaults.synchronize()
-                self.networkManager.fetchStocksData([newFollowed])
+                self.networkManager.fetchNewsAndValues([newFollowed])
             }
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in })
