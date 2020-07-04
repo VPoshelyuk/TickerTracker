@@ -33,26 +33,16 @@ class userInfo: NSObject, NSCoding {
     }
 }
 
-//func registerForNotifications() {
-//  NotificationCenter.default.addObserver(
-//    forName: .appRefreshed,
-//    object: nil,
-//    queue: nil) { (notification) in
-//      print("notification received")
-//  }
-//}
-
 struct ContentView: View {
     @ObservedObject var networkManager = NetworkManager()
     @State var watchedStocks: [userInfo] = []
-    @State var status: [String] = []
     var userDefaults = UserDefaults.standard
     let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
     
     var body: some View {
         VStack {
             Spacer()
-            ScrollView(.horizontal) {
+            ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 10) {
                     ForEach(networkManager.stonks){ stock in
                         TickerButtonView(ticker: stock.quote.symbol, price: stock.quote.latestPrice, color: Color(hex: stock.HEXColor))
@@ -75,27 +65,26 @@ struct ContentView: View {
                 }
                 .frame(width: CGFloat((networkManager.stonks.count + 1) * 85), height: 75)
             }
-            NavigationView {
-                List(networkManager.posts){post in
-                    NavigationLink(destination: DetailView(url: post.url)){
-                        HStack {
-                            Text(post.headline)
-                        }
+            Spacer()
+            ScrollView(.vertical) {
+                VStack(spacing: 10) {
+                    ForEach(networkManager.posts){ post in
+                            NewsBubbleView(imageURL: post.image, name: post.headline, postURL: post.url)
                     }
                 }
-                .navigationBarTitle("Tracked Stocks News:")
+                .frame(width: UIScreen.main.bounds.size.width, height: CGFloat((networkManager.posts.count) * 260))
             }
-            .onAppear{
-                if self.launchedBefore  {
-                    let decoded = self.userDefaults.data(forKey: "watchedStocks")
-                    self.watchedStocks = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [userInfo]
-                } else {
-                    print("First launch, setting UserDefault.")
-                    self.watchedStocks = []
-                }
-                self.networkManager.fetchNewsAndValues(self.watchedStocks)
-                self.update()
+        }
+        .onAppear{
+            if self.launchedBefore  {
+                let decoded = self.userDefaults.data(forKey: "watchedStocks")
+                self.watchedStocks = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [userInfo]
+            } else {
+                print("First launch, setting UserDefault.")
+                self.watchedStocks = []
             }
+            self.networkManager.fetchNewsAndValues(self.watchedStocks)
+            self.update()
         }
     }
     

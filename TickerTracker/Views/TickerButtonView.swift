@@ -27,7 +27,6 @@ struct TickerButtonView: View {
             Text(showingName ? ticker : stringPrice)
                 .fontWeight(.bold)
             }
-            .accentColor(.white)
             .frame(width: 75, height: 75)
             .accentColor(.white)
             .background(color)

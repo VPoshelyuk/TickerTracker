@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E7DFCD8424B0499700A63333 /* TickerButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7DFCD8324B0499700A63333 /* TickerButtonView.swift */; };
+		E7DFCD8624B0524B00A63333 /* NewsBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7DFCD8524B0524B00A63333 /* NewsBubbleView.swift */; };
 		E7F7C6AD24A465CB00DABFEC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F7C6AC24A465CB00DABFEC /* AppDelegate.swift */; };
 		E7F7C6AF24A465CB00DABFEC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F7C6AE24A465CB00DABFEC /* SceneDelegate.swift */; };
 		E7F7C6B124A465CB00DABFEC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F7C6B024A465CB00DABFEC /* ContentView.swift */; };
@@ -22,6 +23,7 @@
 
 /* Begin PBXFileReference section */
 		E7DFCD8324B0499700A63333 /* TickerButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TickerButtonView.swift; sourceTree = "<group>"; };
+		E7DFCD8524B0524B00A63333 /* NewsBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsBubbleView.swift; sourceTree = "<group>"; };
 		E7F7C6A924A465CB00DABFEC /* TickerTrackr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TickerTrackr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7F7C6AC24A465CB00DABFEC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E7F7C6AE24A465CB00DABFEC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 				E7F7C6C924A468A800DABFEC /* DetailView.swift */,
 				E7F7C6C724A4689F00DABFEC /* WebView.swift */,
 				E7DFCD8324B0499700A63333 /* TickerButtonView.swift */,
+				E7DFCD8524B0524B00A63333 /* NewsBubbleView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -186,6 +189,7 @@
 				E7F7C6CA24A468A800DABFEC /* DetailView.swift in Sources */,
 				E7F7C6C824A4689F00DABFEC /* WebView.swift in Sources */,
 				E7F7C6AF24A465CB00DABFEC /* SceneDelegate.swift in Sources */,
+				E7DFCD8624B0524B00A63333 /* NewsBubbleView.swift in Sources */,
 				E7F7C6B124A465CB00DABFEC /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
