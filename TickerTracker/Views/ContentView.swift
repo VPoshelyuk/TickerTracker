@@ -45,6 +45,7 @@ class userInfo: NSObject, NSCoding {
 struct ContentView: View {
     @ObservedObject var networkManager = NetworkManager()
     @State var watchedStocks: [userInfo] = []
+    @State var status: [String] = []
     var userDefaults = UserDefaults.standard
     let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
     
@@ -54,13 +55,7 @@ struct ContentView: View {
             ScrollView(.horizontal) {
                 HStack(spacing: 10) {
                     ForEach(networkManager.stonks){ stock in
-                        Text(stock.quote.symbol)
-                            .frame(width: 75)
-                            .background(
-                                Circle()
-                                    .foregroundColor(Color(hex: stock.HEXColor))
-                                    .frame(width: 75, height: 75)
-                            )
+                        TickerButtonView(ticker: stock.quote.symbol, price: stock.quote.latestPrice, color: Color(hex: stock.HEXColor))
                     }
                     Button(action: {
                         withAnimation {
