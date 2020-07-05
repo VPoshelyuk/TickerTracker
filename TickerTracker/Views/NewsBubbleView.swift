@@ -9,38 +9,45 @@
 import Foundation
 import Combine
 import SwiftUI
+import URLImage
 
 
 struct NewsBubbleView: View {
-    @ObservedObject var remoteImageURL: RemoteImageURL
     @State var presentingModal = false
+    var imageURL: String
+    var image: URL {
+        print(imageURL)
+        return URL(string: imageURL)!
+    }
     var name: String
     var postURL: String
-    
-    init(imageURL: String, name: String, postURL: String) {
-        remoteImageURL = RemoteImageURL(imageURL: imageURL)
-        self.name = name
-        self.postURL = postURL
-    }
-    
     var body: some View {
+        HStack {
+        URLImage(image,
+        delay: 1,
+        processors: [ Resize(size: CGSize(width: 150, height: 150), scale: UIScreen.main.scale)],
+        content:  {
+            $0.image
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+            .clipped()
+        })
+            .frame(width: 150, height: 150, alignment: .center)
+        Spacer()
         Button(action: {
             withAnimation {
                 self.presentingModal = true
             }
         }){
-//            VStack {
-//                Image(uiImage: (remoteImageURL.data.isEmpty) ? UIImage(imageLiteralResourceName: "kitten") : UIImage(data: remoteImageURL.data)!)
-//                    .renderingMode(.original)
                 Text(name)
                     .fontWeight(.bold)
-//                }
+                
             }
-            .padding(.all)
+           }
             .accentColor(.white)
-            .frame(width: UIScreen.main.bounds.size.width - 20, height: 250)
+            .frame(width: UIScreen.main.bounds.size.width - 20, height: 150)
             .background(Color.gray)
-            .cornerRadius(20)
+//            .cornerRadius(20)
             .sheet(isPresented: $presentingModal) { ModalView(presentedAsModal: self.$presentingModal, postURL: self.postURL, name: self.name) }
     }
 }
@@ -51,26 +58,26 @@ struct NewsBubbleView_Previews: PreviewProvider {
     }
 }
 
-class RemoteImageURL: ObservableObject {
-    var didChange = PassthroughSubject<Data, Never>()
-    
-    var data = Data() {
-        didSet {
-            didChange.send(data)
-        }
-    }
-    
-    init(imageURL: String) {
-        guard let url = URL(string: imageURL) else {return}
-        URLSession.shared.dataTask(with: url) {(data, response, error) in
-            guard let data = data else {return}
-            
-            DispatchQueue.main.async {
-                self.data = data
-            }
-        }.resume()
-    }
-}
+//class RemoteImageURL: ObservableObject {
+//    var didChange = PassthroughSubject<Data, Never>()
+//
+//    var data = Data() {
+//        didSet {
+//            didChange.send(data)
+//        }
+//    }
+//
+//    init(imageURL: String) {
+//        guard let url = URL(string: imageURL) else {return}
+//        URLSession.shared.dataTask(with: url) {(data, response, error) in
+//            guard let data = data else {return}
+//
+//            DispatchQueue.main.async {
+//                self.data = data
+//            }
+//        }.resume()
+//    }
+//}
 
 
 struct ModalView: View {

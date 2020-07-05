@@ -72,7 +72,7 @@ struct ContentView: View {
                             NewsBubbleView(imageURL: post.image, name: post.headline, postURL: post.url)
                     }
                 }
-                .frame(width: UIScreen.main.bounds.size.width, height: CGFloat((networkManager.posts.count) * 260))
+                .frame(width: UIScreen.main.bounds.size.width, height: CGFloat((networkManager.posts.count) * 160))
             }
         }
         .onAppear{
