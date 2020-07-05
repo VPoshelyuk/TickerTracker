@@ -90,6 +90,8 @@ struct ContentView: View {
     
     private func update() {
         Timer.scheduledTimer(withTimeInterval: 60 * 60, repeats: true) { timer in //3600 for testing purposes
+            let decoded = self.userDefaults.data(forKey: "watchedStocks")
+            self.watchedStocks = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [userInfo]
             self.networkManager.fetchNewsAndValues(self.watchedStocks)
         }
     }
