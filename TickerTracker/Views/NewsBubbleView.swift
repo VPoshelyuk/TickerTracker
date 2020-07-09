@@ -41,6 +41,7 @@ struct NewsBubbleView: View {
         }){
                 Text(name)
                     .fontWeight(.bold)
+                    .padding()
                 
             }
            }
@@ -57,28 +58,6 @@ struct NewsBubbleView_Previews: PreviewProvider {
         NewsBubbleView(imageURL: "https://pngimg.com/uploads/cat/cat_PNG50538.png", name: "dfdsfsdfsd", postURL: "https://pngimg.com/uploads/cat/cat_PNG50538.png")
     }
 }
-
-//class RemoteImageURL: ObservableObject {
-//    var didChange = PassthroughSubject<Data, Never>()
-//
-//    var data = Data() {
-//        didSet {
-//            didChange.send(data)
-//        }
-//    }
-//
-//    init(imageURL: String) {
-//        guard let url = URL(string: imageURL) else {return}
-//        URLSession.shared.dataTask(with: url) {(data, response, error) in
-//            guard let data = data else {return}
-//
-//            DispatchQueue.main.async {
-//                self.data = data
-//            }
-//        }.resume()
-//    }
-//}
-
 
 struct ModalView: View {
     @Binding var presentedAsModal: Bool

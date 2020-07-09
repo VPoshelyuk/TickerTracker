@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 struct TickerButtonView: View {
-    @ObservedObject var networkManager = NetworkManager()
+    @ObservedObject var networkManager: NetworkManager
     @State var watchedStocks: [userInfo] = []
     var userDefaults = UserDefaults.standard
     var ticker: String
@@ -22,13 +22,15 @@ struct TickerButtonView: View {
     @State var showingName = true
     
     var body: some View {
-        Button(action: {
-            withAnimation {
-                self.showingName.toggle()
-            }
-        }){ VStack {
+        Button(action: {}){
+            VStack {
                 Text(showingName ? ticker : stringPrice)
                     .fontWeight(.bold)
+                .onTapGesture {
+                    withAnimation {
+                        self.showingName.toggle()
+                    }
+                }
                 .onLongPressGesture(minimumDuration: 0.5) {
                     self.alert(self.ticker)
                 }
@@ -46,7 +48,7 @@ struct TickerButtonView: View {
         watchedStocks = watchedStocks.filter { $0.name != tickerName }
         let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: watchedStocks)
         userDefaults.set(encodedData, forKey: "watchedStocks")
-        networkManager.fetchNewsAndValues(watchedStocks)
+        networkManager.removeTicker(withName: tickerName)
     }
     
     private func alert(_ tickerName: String) {

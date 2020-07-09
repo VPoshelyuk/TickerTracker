@@ -45,7 +45,7 @@ struct ContentView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 10) {
                     ForEach(networkManager.stonks){ stock in
-                        TickerButtonView(ticker: stock.quote.symbol, price: stock.quote.latestPrice, color: Color(hex: stock.HEXColor))
+                        TickerButtonView(networkManager: self.networkManager, ticker: stock.quote.symbol, price: stock.quote.latestPrice, color: Color(hex: stock.HEXColor))
                     }
                     Button(action: {
                         withAnimation {

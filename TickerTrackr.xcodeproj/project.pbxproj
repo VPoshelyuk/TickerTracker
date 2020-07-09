@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CF1CEC659B3B24173A97069E /* Pods_TickerTrackr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC6CEA391C591332A9992599 /* Pods_TickerTrackr.framework */; };
+		E76125CA24B79DB8005679E2 /* Link.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76125C924B79DB8005679E2 /* Link.swift */; };
 		E7DFCD8424B0499700A63333 /* TickerButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7DFCD8324B0499700A63333 /* TickerButtonView.swift */; };
 		E7DFCD8624B0524B00A63333 /* NewsBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7DFCD8524B0524B00A63333 /* NewsBubbleView.swift */; };
 		E7DFCD8924B177A900A63333 /* URLImage in Frameworks */ = {isa = PBXBuildFile; productRef = E7DFCD8824B177A900A63333 /* URLImage */; };
@@ -23,6 +25,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AE04EE0119AE9EAAE1496533 /* Pods-TickerTrackr.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TickerTrackr.debug.xcconfig"; path = "Target Support Files/Pods-TickerTrackr/Pods-TickerTrackr.debug.xcconfig"; sourceTree = "<group>"; };
+		CC6CEA391C591332A9992599 /* Pods_TickerTrackr.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TickerTrackr.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DBCB765E2185BDD5CE2E1FDE /* Pods-TickerTrackr.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TickerTrackr.release.xcconfig"; path = "Target Support Files/Pods-TickerTrackr/Pods-TickerTrackr.release.xcconfig"; sourceTree = "<group>"; };
+		E76125C924B79DB8005679E2 /* Link.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Link.swift; sourceTree = "<group>"; };
 		E7DFCD8324B0499700A63333 /* TickerButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TickerButtonView.swift; sourceTree = "<group>"; };
 		E7DFCD8524B0524B00A63333 /* NewsBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsBubbleView.swift; sourceTree = "<group>"; };
 		E7F7C6A924A465CB00DABFEC /* TickerTrackr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TickerTrackr.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -46,17 +52,45 @@
 			buildActionMask = 2147483647;
 			files = (
 				E7DFCD8924B177A900A63333 /* URLImage in Frameworks */,
+				CF1CEC659B3B24173A97069E /* Pods_TickerTrackr.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		10981780534588ED9E10BFB5 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				AE04EE0119AE9EAAE1496533 /* Pods-TickerTrackr.debug.xcconfig */,
+				DBCB765E2185BDD5CE2E1FDE /* Pods-TickerTrackr.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		2A743960E544414F5E7C4C05 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CC6CEA391C591332A9992599 /* Pods_TickerTrackr.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E76125C824B786F8005679E2 /* VM */ = {
+			isa = PBXGroup;
+			children = (
+				E76125C924B79DB8005679E2 /* Link.swift */,
+			);
+			path = VM;
+			sourceTree = "<group>";
+		};
 		E7F7C6A024A465CA00DABFEC = {
 			isa = PBXGroup;
 			children = (
 				E7F7C6AB24A465CB00DABFEC /* TickerTracker */,
 				E7F7C6AA24A465CB00DABFEC /* Products */,
+				10981780534588ED9E10BFB5 /* Pods */,
+				2A743960E544414F5E7C4C05 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -71,6 +105,7 @@
 		E7F7C6AB24A465CB00DABFEC /* TickerTracker */ = {
 			isa = PBXGroup;
 			children = (
+				E76125C824B786F8005679E2 /* VM */,
 				E7F7C6C624A4688B00DABFEC /* Views */,
 				E7F7C6C124A4676600DABFEC /* Models */,
 				E7F7C6C024A4669A00DABFEC /* TickerTracker.entitlements */,
@@ -120,9 +155,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E7F7C6BD24A465CF00DABFEC /* Build configuration list for PBXNativeTarget "TickerTrackr" */;
 			buildPhases = (
+				BD4167B00CA70DD922690BE1 /* [CP] Check Pods Manifest.lock */,
 				E7F7C6A524A465CA00DABFEC /* Sources */,
 				E7F7C6A624A465CA00DABFEC /* Frameworks */,
 				E7F7C6A724A465CA00DABFEC /* Resources */,
+				02A0C7F1CFEB086C6C592AAC /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -185,6 +222,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		02A0C7F1CFEB086C6C592AAC /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TickerTrackr/Pods-TickerTrackr-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TickerTrackr/Pods-TickerTrackr-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TickerTrackr/Pods-TickerTrackr-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BD4167B00CA70DD922690BE1 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TickerTrackr-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		E7F7C6A524A465CA00DABFEC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -199,6 +278,7 @@
 				E7F7C6AF24A465CB00DABFEC /* SceneDelegate.swift in Sources */,
 				E7DFCD8624B0524B00A63333 /* NewsBubbleView.swift in Sources */,
 				E7F7C6B124A465CB00DABFEC /* ContentView.swift in Sources */,
+				E76125CA24B79DB8005679E2 /* Link.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -332,6 +412,7 @@
 		};
 		E7F7C6BE24A465CF00DABFEC /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AE04EE0119AE9EAAE1496533 /* Pods-TickerTrackr.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = TickerTracker/TickerTracker.entitlements;
@@ -355,6 +436,7 @@
 		};
 		E7F7C6BF24A465CF00DABFEC /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DBCB765E2185BDD5CE2E1FDE /* Pods-TickerTrackr.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = TickerTracker/TickerTracker.entitlements;

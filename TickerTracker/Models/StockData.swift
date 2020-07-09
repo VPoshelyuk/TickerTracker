@@ -11,7 +11,7 @@ import Foundation
 //iexcloud.com
 struct Stock: Decodable, Identifiable {
     var quote: Quote
-    let news: [NewsPiece]
+    var news: [NewsPiece]
     var top: Double?
     var bottom: Double?
     var HEXColor: String{
@@ -42,6 +42,7 @@ struct NewsPiece: Decodable, Identifiable, Equatable{
     var id: String{
         return url
     }
+    var associatedStock: String?
 }
 
 extension Stock: Equatable {
