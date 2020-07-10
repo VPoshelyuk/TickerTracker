@@ -11,7 +11,7 @@ import SwiftUI
 
 struct TickerButtonView: View {
     @ObservedObject var networkManager: NetworkManager
-    @Binding var watchedStocks: [userInfo]
+    @Binding var watchedStocks: [UserInfo]
     var userDefaults = UserDefaults.standard
     var ticker: String
     var price: Double

@@ -9,34 +9,9 @@
 import SwiftUI
 import SwiftUIPullToRefresh
 
-class userInfo: NSObject, NSCoding {
-    var name: String
-    var bottom: Double
-    var top: Double
-    
-    init(name: String, bottom: Double, top: Double) {
-        self.name = name
-        self.bottom = bottom
-        self.top = top
-    }
-    
-    required convenience init(coder aDecoder: NSCoder) {
-        let name = aDecoder.decodeObject(forKey: "name") as! String
-        let bottom = aDecoder.decodeDouble(forKey: "bottom")
-        let top = aDecoder.decodeDouble(forKey: "top")
-        self.init(name: name, bottom: bottom, top: top)
-    }
-
-    func encode(with aCoder: NSCoder) {
-        aCoder.encode(name, forKey: "name")
-        aCoder.encode(bottom, forKey: "bottom")
-        aCoder.encode(top, forKey: "top")
-    }
-}
-
 struct ContentView: View {
     @ObservedObject var networkManager = NetworkManager()
-    @State var watchedStocks: [userInfo] = []
+    @State var watchedStocks: [UserInfo] = []
     var userDefaults = UserDefaults.standard
     @State var launchedBefore: Bool = UserDefaults.standard.bool(forKey: "launchedBefore")
     @State var showRefreshView: Bool = false
@@ -45,27 +20,7 @@ struct ContentView: View {
         VStack {
             launchedBefore ? Spacer() : nil
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(alignment: .top, spacing: 10) {
-                    ForEach(networkManager.stonks){ stock in
-                        TickerButtonView(networkManager: self.networkManager, watchedStocks: self.$watchedStocks, ticker: stock.quote.symbol, price: stock.quote.latestPrice, color: Color(hex: stock.HEXColor))
-                    }
-                    Button(action: {
-                        withAnimation {
-                            self.alert()
-                        }
-                    }){
-                        Text("+")
-                            .font(.system(size: 55))
-                            .fontWeight(.bold)
-                            .padding(.bottom, 5)
-                        }
-                        .padding(.all)
-                        .accentColor(.white)
-                        .frame(width: 75, height: 75)
-                        .background(Color.orange)
-                        .cornerRadius(10)
-                }
-                .frame(width: CGFloat((networkManager.stonks.count + 1) * 85), height: 75)
+                TickersList(networkManager: networkManager,watchedStocks: $watchedStocks, launchedBefore: $launchedBefore)
             }
             if !launchedBefore {
                 Text("Hello, Future Billionaire!\nWelcome to TickerTracker📈\nTo start using the app simply press on Plus sign, enter the ticker you want to monitor and Limit & Stop prices!\nEnjoy the app!")
@@ -78,25 +33,13 @@ struct ContentView: View {
                 Spacer()
             } else {
                 Spacer()
-                RefreshableList(showRefreshView: $showRefreshView, action:{
-                    self.networkManager.updateNews(self.watchedStocks)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                        self.showRefreshView = false
-                    }
-                }){
-                    VStack(spacing: 10) {
-                        ForEach(self.networkManager.posts){ post in
-                                NewsBubbleView(imageURL: post.image, name: post.headline, postURL: post.url)
-                        }
-                    }
-                    .frame(width: UIScreen.main.bounds.size.width - 40, height: CGFloat((self.networkManager.posts.count) * 160))
-                }
+                NewsList(networkManager: networkManager, showRefreshView: $showRefreshView, watchedStocks: $watchedStocks)
             }
         }
         .onAppear{
             if self.launchedBefore  {
                 let decoded = self.userDefaults.data(forKey: "watchedStocks")
-                self.watchedStocks = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [userInfo]
+                self.watchedStocks = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [UserInfo]
             } else {
                 print("First launch, setting UserDefault.")
                 self.watchedStocks = []
@@ -109,75 +52,9 @@ struct ContentView: View {
     private func update() {
         Timer.scheduledTimer(withTimeInterval: 60 * 60, repeats: true) { timer in //3600 for testing purposes
             let decoded = self.userDefaults.data(forKey: "watchedStocks")
-            self.watchedStocks = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [userInfo]
+            self.watchedStocks = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [UserInfo]
             self.networkManager.updateNewsAndPrices(self.watchedStocks)
         }
-    }
-    
-    private func alert() {
-        let alert = UIAlertController(title: "Stock Information", message: "Enter Ticker that you want to follow and Price Range:", preferredStyle: .alert)
-        alert.addTextField() { textField in
-            textField.placeholder = "Enter Ticker"
-        }
-        alert.addTextField() { textField in
-            textField.placeholder = "Limit Order"
-        }
-        alert.addTextField() { textField in
-            textField.placeholder = "Stop Order"
-        }
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [alert] (_) in
-            if let newStock = alert.textFields![0].text?.uppercased(), let bottom = alert.textFields?[1].text!, let top = alert.textFields?[2].text! {
-                let newFollowed = userInfo(name: newStock, bottom: Double((bottom as NSString).doubleValue), top: Double((top as NSString).doubleValue))
-                self.watchedStocks.append(newFollowed)
-                let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.watchedStocks)
-                self.userDefaults.set(encodedData, forKey: "watchedStocks")
-                if !self.launchedBefore {
-                    UserDefaults.standard.set(true, forKey: "launchedBefore")
-                    self.launchedBefore.toggle()
-                }
-                self.userDefaults.synchronize()
-                self.networkManager.fetchNewsAndValues([newFollowed])
-            }
-        }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in })
-        showAlert(alert: alert)
-    }
-
-    func showAlert(alert: UIAlertController) {
-        if let controller = topMostViewController() {
-            controller.present(alert, animated: true)
-        }
-    }
-
-    private func keyWindow() -> UIWindow? {
-        return UIApplication.shared.connectedScenes
-        .filter {$0.activationState == .foregroundActive}
-        .compactMap {$0 as? UIWindowScene}
-        .first?.windows.filter {$0.isKeyWindow}.first
-    }
-
-    private func topMostViewController() -> UIViewController? {
-        guard let rootController = keyWindow()?.rootViewController else {
-            return nil
-        }
-        return topMostViewController(for: rootController)
-    }
-
-    private func topMostViewController(for controller: UIViewController) -> UIViewController {
-        if let presentedController = controller.presentedViewController {
-            return topMostViewController(for: presentedController)
-        } else if let navigationController = controller as? UINavigationController {
-            guard let topController = navigationController.topViewController else {
-                return navigationController
-            }
-            return topMostViewController(for: topController)
-        } else if let tabController = controller as? UITabBarController {
-            guard let topController = tabController.selectedViewController else {
-                return tabController
-            }
-            return topMostViewController(for: topController)
-        }
-        return controller
     }
 }
 

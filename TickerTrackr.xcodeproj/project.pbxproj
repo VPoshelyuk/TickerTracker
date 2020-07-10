@@ -10,6 +10,9 @@
 		CF1CEC659B3B24173A97069E /* Pods_TickerTrackr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC6CEA391C591332A9992599 /* Pods_TickerTrackr.framework */; };
 		E76125CA24B79DB8005679E2 /* Link.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76125C924B79DB8005679E2 /* Link.swift */; };
 		E76125D224B7E1D9005679E2 /* SwiftUIPullToRefresh in Frameworks */ = {isa = PBXBuildFile; productRef = E76125D124B7E1D9005679E2 /* SwiftUIPullToRefresh */; };
+		E7B8CE0124B7FFC6001F0F8C /* TickersList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B8CE0024B7FFC6001F0F8C /* TickersList.swift */; };
+		E7B8CE0324B800D6001F0F8C /* NewsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B8CE0224B800D6001F0F8C /* NewsList.swift */; };
+		E7B8CE0524B80A3C001F0F8C /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B8CE0424B80A3C001F0F8C /* UserInfo.swift */; };
 		E7DFCD8424B0499700A63333 /* TickerButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7DFCD8324B0499700A63333 /* TickerButtonView.swift */; };
 		E7DFCD8624B0524B00A63333 /* NewsBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7DFCD8524B0524B00A63333 /* NewsBubbleView.swift */; };
 		E7DFCD8924B177A900A63333 /* URLImage in Frameworks */ = {isa = PBXBuildFile; productRef = E7DFCD8824B177A900A63333 /* URLImage */; };
@@ -30,6 +33,9 @@
 		CC6CEA391C591332A9992599 /* Pods_TickerTrackr.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TickerTrackr.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBCB765E2185BDD5CE2E1FDE /* Pods-TickerTrackr.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TickerTrackr.release.xcconfig"; path = "Target Support Files/Pods-TickerTrackr/Pods-TickerTrackr.release.xcconfig"; sourceTree = "<group>"; };
 		E76125C924B79DB8005679E2 /* Link.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Link.swift; sourceTree = "<group>"; };
+		E7B8CE0024B7FFC6001F0F8C /* TickersList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TickersList.swift; sourceTree = "<group>"; };
+		E7B8CE0224B800D6001F0F8C /* NewsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsList.swift; sourceTree = "<group>"; };
+		E7B8CE0424B80A3C001F0F8C /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		E7DFCD8324B0499700A63333 /* TickerButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TickerButtonView.swift; sourceTree = "<group>"; };
 		E7DFCD8524B0524B00A63333 /* NewsBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsBubbleView.swift; sourceTree = "<group>"; };
 		E7F7C6A924A465CB00DABFEC /* TickerTrackr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TickerTrackr.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -134,6 +140,7 @@
 			children = (
 				E7F7C6C224A4677E00DABFEC /* NetworkManager.swift */,
 				E7F7C6CB24A54CEE00DABFEC /* StockData.swift */,
+				E7B8CE0424B80A3C001F0F8C /* UserInfo.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -146,6 +153,8 @@
 				E7F7C6C724A4689F00DABFEC /* WebView.swift */,
 				E7DFCD8324B0499700A63333 /* TickerButtonView.swift */,
 				E7DFCD8524B0524B00A63333 /* NewsBubbleView.swift */,
+				E7B8CE0024B7FFC6001F0F8C /* TickersList.swift */,
+				E7B8CE0224B800D6001F0F8C /* NewsList.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -276,9 +285,12 @@
 				E7F7C6CC24A54CEE00DABFEC /* StockData.swift in Sources */,
 				E7F7C6C324A4677E00DABFEC /* NetworkManager.swift in Sources */,
 				E7DFCD8424B0499700A63333 /* TickerButtonView.swift in Sources */,
+				E7B8CE0124B7FFC6001F0F8C /* TickersList.swift in Sources */,
 				E7F7C6AD24A465CB00DABFEC /* AppDelegate.swift in Sources */,
 				E7F7C6CA24A468A800DABFEC /* DetailView.swift in Sources */,
+				E7B8CE0324B800D6001F0F8C /* NewsList.swift in Sources */,
 				E7F7C6C824A4689F00DABFEC /* WebView.swift in Sources */,
+				E7B8CE0524B80A3C001F0F8C /* UserInfo.swift in Sources */,
 				E7F7C6AF24A465CB00DABFEC /* SceneDelegate.swift in Sources */,
 				E7DFCD8624B0524B00A63333 /* NewsBubbleView.swift in Sources */,
 				E7F7C6B124A465CB00DABFEC /* ContentView.swift in Sources */,

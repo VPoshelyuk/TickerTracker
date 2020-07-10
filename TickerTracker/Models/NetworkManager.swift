@@ -15,19 +15,19 @@ class NetworkManager: ObservableObject {
     static var globalStonks = [Stock]()
     static let session = URLSession(configuration: .default)
     
-    func fetchNewsAndValues(_ tickers: [userInfo]) {
+    func fetchNewsAndValues(_ tickers: [UserInfo]) {
         for ticker in tickers {
             fetchAll(with: createStringURL(name: ticker.name), ticker: ticker)
         }
     }
     
-    func updateNews(_ tickers: [userInfo]) {
+    func updateNews(_ tickers: [UserInfo]) {
         for ticker in tickers {
             checkNews(with: createStringURL(name: ticker.name), ticker: ticker)
         }
     }
     
-    func updateNewsAndPrices(_ tickers: [userInfo]) {
+    func updateNewsAndPrices(_ tickers: [UserInfo]) {
         for ticker in tickers {
             checkNewsAndPrices(with: createStringURL(name: ticker.name), ticker: ticker)
         }
@@ -37,7 +37,7 @@ class NetworkManager: ObservableObject {
         return "https://cloud.iexapis.com/stable/stock/\(name)/batch?types=quote,news&token=pk_871ea244ab314546a2c5c16427f7e86f"
     }
     
-    func fetchAll(with urlString: String, ticker: userInfo) {
+    func fetchAll(with urlString: String, ticker: UserInfo) {
         if let url = URL(string: urlString) {
             let task = NetworkManager.session.dataTask(with: url) { (data, response, error) in
                 if error == nil {
@@ -71,17 +71,15 @@ class NetworkManager: ObservableObject {
     }
     
     func removeTicker(withName ticker: String) {
-        print(self.stonks, self.posts, ticker)
         self.posts.removeAll(where: {post in
             post.associatedStock == ticker
         })
         if let index = self.stonks.firstIndex(where: {$0.id == ticker}) {
             self.stonks.remove(at: index)
         }
-        print(self.stonks, self.posts, ticker)
     }
     
-    func checkNews(with urlString: String, ticker: userInfo) {
+    func checkNews(with urlString: String, ticker: UserInfo) {
         if let url = URL(string: urlString) {
             let task = NetworkManager.session.dataTask(with: url) { (data, response, error) in
                 if error == nil {
@@ -110,7 +108,7 @@ class NetworkManager: ObservableObject {
         }
     }
     
-    func checkNewsAndPrices(with urlString: String, ticker: userInfo) {
+    func checkNewsAndPrices(with urlString: String, ticker: UserInfo) {
         if let url = URL(string: urlString) {
             let task = NetworkManager.session.dataTask(with: url) { (data, response, error) in
                 if error == nil {
@@ -145,7 +143,7 @@ class NetworkManager: ObservableObject {
         }
     }
     
-    static func globalStocksFetch(_ tickers: [userInfo]) {
+    static func globalStocksFetch(_ tickers: [UserInfo]) {
         for ticker in tickers {
             if let url = URL(string: "https://api.polygon.io/v1/last_quote/stocks/\(ticker.name)?apiKey=B5_f8CsVoyXFLajXMC1t1avFaSB9oEe3fiPTF9") {
                 let task = NetworkManager.session.dataTask(with: url) { (data, response, error) in

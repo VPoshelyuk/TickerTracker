@@ -16,7 +16,6 @@ struct NewsBubbleView: View {
     @State var presentingModal = false
     var imageURL: String
     var image: URL {
-        print(Color(UIColor.systemBackground))
         return URL(string: imageURL)!
     }
     var name: String

@@ -45,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
         let currentStonks = NetworkManager.globalStonks.sorted(by: { $0.id < $1.id })
         if launchedBefore {
-            let userStonks = NSKeyedUnarchiver.unarchiveObject(with: userDefaults.data(forKey: "watchedStocks")!) as! [userInfo]
+            let userStonks = NSKeyedUnarchiver.unarchiveObject(with: userDefaults.data(forKey: "watchedStocks")!) as! [UserInfo]
             NetworkManager.globalStocksFetch(userStonks)
             let newStonks = NetworkManager.globalStonks.sorted(by: { $0.id < $1.id })
             if(currentStonks == newStonks){
