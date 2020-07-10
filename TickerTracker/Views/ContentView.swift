@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftUIPullToRefresh
 
 class userInfo: NSObject, NSCoding {
     var name: String
@@ -37,13 +38,14 @@ struct ContentView: View {
     @ObservedObject var networkManager = NetworkManager()
     @State var watchedStocks: [userInfo] = []
     var userDefaults = UserDefaults.standard
-    let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
+    @State var launchedBefore: Bool = UserDefaults.standard.bool(forKey: "launchedBefore")
+    @State var showRefreshView: Bool = false
     
     var body: some View {
         VStack {
-            Spacer()
+            launchedBefore ? Spacer() : nil
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 10) {
+                HStack(alignment: .top, spacing: 10) {
                     ForEach(networkManager.stonks){ stock in
                         TickerButtonView(networkManager: self.networkManager, ticker: stock.quote.symbol, price: stock.quote.latestPrice, color: Color(hex: stock.HEXColor))
                     }
@@ -65,14 +67,30 @@ struct ContentView: View {
                 }
                 .frame(width: CGFloat((networkManager.stonks.count + 1) * 85), height: 75)
             }
-            Spacer()
-            ScrollView(.vertical) {
-                VStack(spacing: 10) {
-                    ForEach(networkManager.posts){ post in
-                            NewsBubbleView(imageURL: post.image, name: post.headline, postURL: post.url)
+            if !launchedBefore {
+                Text("Hello, Future Billionaire!\nWelcome to TickerTracker📈\nTo start using the app simply press on Plus sign, enter the ticker you want to monitor and Limit & Stop prices!\nEnjoy the app!")
+                    .font(.custom("Futura Medium", size: UIScreen.main.bounds.size.width/18))
+                    .foregroundColor(Color.white)
+                    .multilineTextAlignment(.center)
+                    .padding()
+                    .frame(width: UIScreen.main.bounds.size.width - 40, height: 300)
+                    .background(RoundedCorners(tl: 0, tr: 30, bl: 30, br: 30).fill(Color.orange))
+                Spacer()
+            } else {
+                Spacer()
+                RefreshableList(showRefreshView: $showRefreshView, action:{
+                    self.networkManager.updateNews()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                        self.showRefreshView = false
                     }
+                }){
+                    VStack(spacing: 10) {
+                        ForEach(self.networkManager.posts){ post in
+                                NewsBubbleView(imageURL: post.image, name: post.headline, postURL: post.url)
+                        }
+                    }
+                    .frame(width: UIScreen.main.bounds.size.width - 40, height: CGFloat((self.networkManager.posts.count) * 160))
                 }
-                .frame(width: UIScreen.main.bounds.size.width, height: CGFloat((networkManager.posts.count) * 160))
             }
         }
         .onAppear{
@@ -97,7 +115,7 @@ struct ContentView: View {
     }
     
     private func alert() {
-        let alert = UIAlertController(title: "Sup", message: "Yo", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Stock Information", message: "Enter Ticker that you want to follow and Price Range:", preferredStyle: .alert)
         alert.addTextField() { textField in
             textField.placeholder = "Enter Ticker"
         }
@@ -115,6 +133,7 @@ struct ContentView: View {
                 self.userDefaults.set(encodedData, forKey: "watchedStocks")
                 if !self.launchedBefore {
                     UserDefaults.standard.set(true, forKey: "launchedBefore")
+                    self.launchedBefore.toggle()
                 }
                 self.userDefaults.synchronize()
                 self.networkManager.fetchNewsAndValues([newFollowed])
@@ -244,5 +263,43 @@ extension Color {
     }
 }
 
+struct RoundedCorners: Shape {
+    var tl: CGFloat = 0.0
+    var tr: CGFloat = 0.0
+    var bl: CGFloat = 0.0
+    var br: CGFloat = 0.0
+
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+
+        let w = rect.size.width
+        let h = rect.size.height
+
+        // Make sure we do not exceed the size of the rectangle
+        let tr = min(min(self.tr, h/2), w/2)
+        let tl = min(min(self.tl, h/2), w/2)
+        let bl = min(min(self.bl, h/2), w/2)
+        let br = min(min(self.br, h/2), w/2)
+
+        path.move(to: CGPoint(x: w / 2.0, y: 0))
+        path.addLine(to: CGPoint(x: w - tr, y: 0))
+        path.addArc(center: CGPoint(x: w - tr, y: tr), radius: tr,
+                    startAngle: Angle(degrees: -90), endAngle: Angle(degrees: 0), clockwise: false)
+
+        path.addLine(to: CGPoint(x: w, y: h - br))
+        path.addArc(center: CGPoint(x: w - br, y: h - br), radius: br,
+                    startAngle: Angle(degrees: 0), endAngle: Angle(degrees: 90), clockwise: false)
+
+        path.addLine(to: CGPoint(x: bl, y: h))
+        path.addArc(center: CGPoint(x: bl, y: h - bl), radius: bl,
+                    startAngle: Angle(degrees: 90), endAngle: Angle(degrees: 180), clockwise: false)
+
+        path.addLine(to: CGPoint(x: 0, y: tl))
+        path.addArc(center: CGPoint(x: tl, y: tl), radius: tl,
+                    startAngle: Angle(degrees: 180), endAngle: Angle(degrees: 270), clockwise: false)
+
+        return path
+    }
+}
 
 //e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWithIdentifier:@"com.viachaslaupashaliuk.apprefresh"]

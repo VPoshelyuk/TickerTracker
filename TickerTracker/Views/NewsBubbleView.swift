@@ -16,39 +16,38 @@ struct NewsBubbleView: View {
     @State var presentingModal = false
     var imageURL: String
     var image: URL {
-        print(imageURL)
+        print(Color(UIColor.systemBackground))
         return URL(string: imageURL)!
     }
     var name: String
     var postURL: String
     var body: some View {
         HStack {
-        URLImage(image,
-        delay: 1,
-        processors: [ Resize(size: CGSize(width: 150, height: 150), scale: UIScreen.main.scale)],
-        content:  {
-            $0.image
-            .resizable()
-            .aspectRatio(contentMode: .fill)
-            .clipped()
-        })
-            .frame(width: 150, height: 150, alignment: .center)
-        Spacer()
-        Button(action: {
-            withAnimation {
-                self.presentingModal = true
-            }
-        }){
-                Text(name)
-                    .fontWeight(.bold)
-                    .padding()
-                
-            }
-           }
+            URLImage(image,
+            delay: 1,
+            processors: [ Resize(size: CGSize(width: 150, height: 150), scale: UIScreen.main.scale)],
+            content:  {
+                $0.image
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .clipped()
+            })
+                .frame(width: 150, height: 150, alignment: .center)
+            Spacer()
+            Text(name)
+                .fontWeight(.bold)
+                .foregroundColor(Color(UIColor.systemBackground))
+                .padding()
+        }
             .accentColor(.white)
             .frame(width: UIScreen.main.bounds.size.width - 20, height: 150)
-            .background(Color.gray)
-//            .cornerRadius(20)
+            .background(LinearGradient(gradient: Gradient(colors: [.white, .orange]), startPoint: .topLeading, endPoint: .bottomTrailing))
+            .cornerRadius(20)
+            .onTapGesture {
+                withAnimation {
+                    self.presentingModal = true
+                }
+            }
             .sheet(isPresented: $presentingModal) { ModalView(presentedAsModal: self.$presentingModal, postURL: self.postURL, name: self.name) }
     }
 }
@@ -69,7 +68,10 @@ struct ModalView: View {
                 Text(name)
                 Button("Back") { self.presentedAsModal = false }
             }
+            .frame(maxHeight: 50.0)
+            .padding()
             DetailView(url: postURL)
         }
     }
 }
+
