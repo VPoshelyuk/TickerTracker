@@ -47,7 +47,7 @@ struct ContentView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(alignment: .top, spacing: 10) {
                     ForEach(networkManager.stonks){ stock in
-                        TickerButtonView(networkManager: self.networkManager, ticker: stock.quote.symbol, price: stock.quote.latestPrice, color: Color(hex: stock.HEXColor))
+                        TickerButtonView(networkManager: self.networkManager, watchedStocks: self.$watchedStocks, ticker: stock.quote.symbol, price: stock.quote.latestPrice, color: Color(hex: stock.HEXColor))
                     }
                     Button(action: {
                         withAnimation {
@@ -79,7 +79,7 @@ struct ContentView: View {
             } else {
                 Spacer()
                 RefreshableList(showRefreshView: $showRefreshView, action:{
-                    self.networkManager.updateNews()
+                    self.networkManager.updateNews(self.watchedStocks)
                     DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                         self.showRefreshView = false
                     }
@@ -110,7 +110,7 @@ struct ContentView: View {
         Timer.scheduledTimer(withTimeInterval: 60 * 60, repeats: true) { timer in //3600 for testing purposes
             let decoded = self.userDefaults.data(forKey: "watchedStocks")
             self.watchedStocks = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [userInfo]
-            self.networkManager.fetchNewsAndValues(self.watchedStocks)
+            self.networkManager.updateNewsAndPrices(self.watchedStocks)
         }
     }
     
@@ -301,5 +301,3 @@ struct RoundedCorners: Shape {
         return path
     }
 }
-
-//e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWithIdentifier:@"com.viachaslaupashaliuk.apprefresh"]

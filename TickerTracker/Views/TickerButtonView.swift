@@ -11,7 +11,7 @@ import SwiftUI
 
 struct TickerButtonView: View {
     @ObservedObject var networkManager: NetworkManager
-    @State var watchedStocks: [userInfo] = []
+    @Binding var watchedStocks: [userInfo]
     var userDefaults = UserDefaults.standard
     var ticker: String
     var price: Double
@@ -43,12 +43,12 @@ struct TickerButtonView: View {
     }
     
     private func update(_ tickerName: String) {
-        let decoded = self.userDefaults.data(forKey: "watchedStocks")
-        watchedStocks = NSKeyedUnarchiver.unarchiveObject(with: decoded!) as! [userInfo]
-        watchedStocks = watchedStocks.filter { $0.name != tickerName }
+        networkManager.removeTicker(withName: tickerName)
+        if let index = watchedStocks.firstIndex(where: {$0.name == tickerName}) {
+            watchedStocks.remove(at: index)
+        }
         let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: watchedStocks)
         userDefaults.set(encodedData, forKey: "watchedStocks")
-        networkManager.removeTicker(withName: tickerName)
     }
     
     private func alert(_ tickerName: String) {

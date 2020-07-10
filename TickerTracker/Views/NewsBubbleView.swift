@@ -38,6 +38,7 @@ struct NewsBubbleView: View {
                 .fontWeight(.bold)
                 .foregroundColor(Color(UIColor.systemBackground))
                 .padding()
+                .frame(width: UIScreen.main.bounds.size.width - 180, height: 150)
         }
             .accentColor(.white)
             .frame(width: UIScreen.main.bounds.size.width - 20, height: 150)
